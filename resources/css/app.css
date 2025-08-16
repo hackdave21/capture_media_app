@@ -1,0 +1,230 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  body {
+    @apply antialiased;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-gray-800;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400 dark:bg-gray-500;
+  }
+}
+
+@layer components {
+  /* Line clamp utilities */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Custom shadow */
+  .shadow-3xl {
+    box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.25);
+  }
+
+  /* Gradient text */
+  .text-gradient {
+    @apply bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent;
+  }
+
+  /* Article content styles */
+  .prose-custom {
+    @apply prose prose-lg max-w-none;
+  }
+  
+  .prose-custom h1,
+  .prose-custom h2,
+  .prose-custom h3,
+  .prose-custom h4,
+  .prose-custom h5,
+  .prose-custom h6 {
+    @apply text-gray-900 dark:text-white font-bold;
+  }
+  
+  .prose-custom p {
+    @apply text-gray-700 dark:text-gray-300 leading-relaxed;
+  }
+  
+  .prose-custom a {
+    @apply text-yellow-600 dark:text-yellow-400 hover:text-yellow-700 dark:hover:text-yellow-300 font-medium;
+  }
+  
+  .prose-custom blockquote {
+    @apply border-l-4 border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20 p-4 italic;
+  }
+  
+  .prose-custom pre {
+    @apply bg-gray-800 dark:bg-gray-900 text-gray-100;
+  }
+  
+  .prose-custom code {
+    @apply bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-2 py-1 rounded;
+  }
+
+  /* Button animations */
+  .btn-hover-float {
+    @apply transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg;
+  }
+
+  /* Card hover effects */
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-2xl hover:-translate-y-2;
+  }
+
+  /* Loading animation */
+  .loading-dots {
+    @apply inline-block relative w-20 h-5;
+  }
+  
+  .loading-dots div {
+    @apply absolute top-3 w-3 h-3 rounded-full bg-yellow-500 animate-pulse;
+  }
+  
+  .loading-dots div:nth-child(1) { left: 8px; animation-delay: 0s; }
+  .loading-dots div:nth-child(2) { left: 32px; animation-delay: 0.1s; }
+  .loading-dots div:nth-child(3) { left: 56px; animation-delay: 0.2s; }
+}
+
+@layer utilities {
+  /* Text selection */
+  ::selection {
+    @apply bg-yellow-200 text-gray-900;
+  }
+
+  /* Focus styles */
+  .focus-yellow {
+    @apply focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:outline-none;
+  }
+
+  /* Responsive breakpoints helpers */
+  .mobile-only {
+    @apply block sm:hidden;
+  }
+  
+  .desktop-only {
+    @apply hidden sm:block;
+  }
+
+  /* Cookie consent animations */
+  .cookie-slide-up {
+    animation: slideUpFromBottom 0.3s ease-out;
+  }
+
+  @keyframes slideUpFromBottom {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  /* Donation button pulse */
+  .donation-pulse {
+    animation: donationPulse 2s infinite;
+  }
+
+  @keyframes donationPulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(245, 158, 11, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+    }
+  }
+}
+
+/* Custom animations */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 0.6s ease-out;
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.4s ease-out;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+
+/* Dark mode improvements */
+@media (prefers-color-scheme: dark) {
+  img {
+    opacity: 0.9;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-only {
+    display: block !important;
+  }
+}
