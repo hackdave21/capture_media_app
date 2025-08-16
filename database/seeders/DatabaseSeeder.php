@@ -14,6 +14,9 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+
+        $this->call(\Database\Seeders\AdminSeeder::class);
+        
         // Categories
         $categories = [
             ['name' => 'Politique', 'color' => '#3B82F6'],
@@ -142,7 +145,7 @@ class DatabaseSeeder extends Seeder
 
         foreach ($posts as $postData) {
             $post = Post::create($postData);
-            
+
             // Attach sponsors to some posts
             if ($post->id <= 2) {
                 $post->sponsors()->attach([1, 2]);
