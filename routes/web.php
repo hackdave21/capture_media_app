@@ -6,6 +6,8 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\Admin\AuthorController;
+use App\Http\Controllers\Admin\SponsorController;
+use App\Http\Controllers\AdminAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,21 +25,34 @@ Route::get('/categories/{category}', [CategoryController::class, 'show'])->name(
 Route::get('/pays', [CountryController::class, 'index'])->name('countries.index');
 Route::get('/pays/{country}', [CountryController::class, 'show'])->name('countries.show');
 
-// Admin routes (placées avant la route générique)
+// --- Routes d'auth Admin ---
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/', function () {
-        $posts = \App\Models\Post::with(['author', 'category'])->latest()->paginate(10);
-        return view('admin.index', compact('posts'));
-    })->name('dashboard');
+    // invités uniquement (pas connectés en tant qu'admin)
+    Route::middleware('guest:admin')->group(function () {
+        Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login');
+        Route::post('/login', [AdminAuthController::class, 'login'])->name('login.submit');
+    });
 
-    // Articles CRUD
-    Route::resource('posts', \App\Http\Controllers\Admin\PostController::class)->except(['show']);
+    // connectés en tant qu'admin
+    Route::middleware('auth:admin')->group(function () {
+        Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
-    // Sponsors CRUD
-    Route::resource('sponsors', \App\Http\Controllers\Admin\SponsorController::class)->except(['show', 'edit', 'update']);
+        // --- TON BACK-OFFICE PROTÉGÉ ---
+        Route::get('/', function () {
+            $posts = \App\Models\Post::with(['author', 'category'])->latest()->paginate(10);
+            return view('admin.index', compact('posts'));
+        })->name('dashboard');
 
-    // Authors CRUD
-    Route::resource('authors', AuthorController::class)->only(['index', 'store', 'destroy']);
+        // Articles CRUD
+        Route::resource('posts', PostController::class)->except(['show']);
+
+        // Sponsors CRUD
+        Route::resource('sponsors', SponsorController::class)->except(['show', 'edit', 'update']);
+
+        // Authors CRUD
+        Route::resource('authors', AuthorController::class)->only(['index', 'store', 'destroy']);
+
+    });
 });
 
 // Page de recherche : doit être placée AVANT la route générique "/{post}"
